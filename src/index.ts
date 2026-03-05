@@ -112,13 +112,93 @@ Status: ${consulta.status}
 `;
 }
 
+// CRIAÇÃO DAS CONSULTAS
+
+// Agendada
 const consulta1 = criarConsulta(
   1,
   medico1,
   paciente1,
-  new Date(),
+  new Date("2026-05-10"),
   350
 );
-const consultaConfirmada = confirmarConsulta(consulta1);
-console.log("=== CONSULTA CONFIRMADA ===");
-console.log(exibirConsulta(consultaConfirmada));
+
+// Confirmada
+const consulta2Base = criarConsulta(
+  2,
+  medico2,
+  paciente2,
+  new Date("2026-06-15"),
+  500
+);
+const consulta2 = confirmarConsulta(consulta2Base);
+
+// Cancelada
+const consulta3Base = criarConsulta(
+  3,
+  medico3,
+  paciente3,
+  new Date("2026-07-20"),
+  200
+);
+const consulta3 = cancelarConsulta(consulta3Base);
+
+// Realizada
+const consulta4Base = criarConsulta(
+  4,
+  medico1,
+  paciente2,
+  new Date("2024-01-10"),
+  400
+);
+const consulta4: Consulta = {
+  ...consulta4Base,
+  status: "realizada",
+};
+
+// Agendada
+const consulta5 = criarConsulta(
+  5,
+  medico2,
+  paciente3,
+  new Date("2026-08-01"),
+  300
+);
+
+function listarConsultasFuturas(consultas: Consulta[]): Consulta[] {
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+
+  return consultas.filter((consulta) => {
+    const dataConsulta = new Date(consulta.data);
+    dataConsulta.setHours(0, 0, 0, 0);
+
+    return dataConsulta >= hoje;
+  });
+}
+
+const todasConsultas: Consulta[] = [
+  consulta1,
+  consulta2,
+  consulta3!, //estava dando erro e foi utilizado o uso de IA para ajudar a solucionar o problema
+  consulta4,
+  consulta5,
+];
+
+// EXIBIR CONSULTAS
+
+console.log("=== TODAS AS CONSULTAS ===");
+
+todasConsultas.forEach((consulta) => {
+  console.log(exibirConsulta(consulta));
+});
+
+// LISTAGEM FUTURAS
+
+const consultasFuturas = listarConsultasFuturas(todasConsultas);
+
+console.log("=== CONSULTAS FUTURAS ===");
+
+consultasFuturas.forEach((consulta) => {
+  console.log(exibirConsulta(consulta));
+});

@@ -19,6 +19,7 @@ const pediatria: Especialidade = {
   id: 3,
   nome: "Pediatria",
 };
+
 // Médicos
 const medico1: Medico = {
   id: 1,
@@ -41,6 +42,7 @@ const medico3: Medico = {
   especialidade: pediatria,
   ativo: true,
 };
+
 // Pacientes
 const paciente1: Paciente = {
   id: 1,
@@ -62,6 +64,7 @@ const paciente3: Paciente = {
   email: "pedro@email.com",
 };
 
+// Funções
 function criarConsulta(
   id: number,
   medico: Medico,
@@ -112,7 +115,7 @@ Status: ${consulta.status}
 `;
 }
 
-// CRIAÇÃO DAS CONSULTAS
+// Criação Das Consultas
 
 // Agendada
 const consulta1 = criarConsulta(
@@ -202,3 +205,33 @@ console.log("=== CONSULTAS FUTURAS ===");
 consultasFuturas.forEach((consulta) => {
   console.log(exibirConsulta(consulta));
 });
+
+
+// 1. Inicialização do Array Tipado
+const consultas: Consulta[] = [];
+
+// 2. Criando e adicionando as 5 consultas com status variados
+
+// Consulta 1: Agendada
+const c1 = criarConsulta(1, medico1, paciente1, new Date("2026-05-10"), 350);
+consultas.push(c1);
+
+// Consulta 2: Confirmada
+const c2Base = criarConsulta(2, medico2, paciente2, new Date("2026-06-15"), 500);
+consultas.push(confirmarConsulta(c2Base));
+
+// Consulta 3: Cancelada
+const c3Base = criarConsulta(3, medico3, paciente3, new Date("2026-07-20"), 200);
+const c3 = cancelarConsulta(c3Base);
+if (c3) consultas.push(c3); // Adiciona apenas se não for null
+
+// Consulta 4: Realizada
+const c4Base = criarConsulta(4, medico1, paciente2, new Date("2024-01-10"), 400);
+const c4: Consulta = { ...c4Base, status: "realizada" };
+consultas.push(c4);
+
+// Consulta 5: Agendada
+const c5 = criarConsulta(5, medico2, paciente3, new Date("2026-08-01"), 300);
+consultas.push(c5);
+
+consultas.forEach(c => console.log(exibirConsulta(c)));
